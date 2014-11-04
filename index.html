@@ -18,9 +18,39 @@
 
     </head>
     <body>
-        <main class="container">
-            <h1>Movies from 2014</h1>
-
+        <main class="container" ng-app="AngularDemo">
+            <section ng-controller="HelloController">
+                <h1>Introduce Yourself</h1>
+                <p><input type="text" class="form-control" placeholder="enter your first name" ng-model="person.first_name"/></p>
+                <p><input type="text" class="form-control" placeholder="enter your last name" ng-model="person.last_name"/></p>
+                <p>Hello {{person.first_name}} {{person.last_name}}</p>
+            </section>
+            
+            <section ng-controller="MoviesController">
+                <h1>Movies from 2014</h1>
+                <p><input type="search" class="form-control" placeholder="search for a title" ng-model="searchString"/></p>
+                <p>{{filtered_movies.length}} {{1 == filtered_movies.length ? 'movie' : 'movies'}}</p>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th ng-click="sortBy('rank')" ng-class="{sorted: isSortedBy('rank')}">Rank</th>
+                            <th ng-click="sortBy('title')" ng-class="{sorted: isSortedBy('title')}">Title</th>
+                            <th ng-click="sortBy('grossSales')" ng-class="{sorted: isSortedBy('grossSales')}">Sales</th>
+                            <th ng-click="sortBy('ticketsSold')" ng-class="{sorted: isSortedBy('ticketsSold')}">Tickets</th>
+                            <th ng-click="sortBy('releaseDate')" ng-class="{sorted: isSortedBy('releaseDate')}"> Release Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="movie in filtered_movies = (movies | filter : {title: searchString} | orderBy : sortCol : sortReverse)">
+                            <td>{{movie.rank}}</td>
+                            <td>{{movie.title}}</td>
+                            <td>{{movie.grossSales | currency : '$' : 0}}</td>
+                            <td>{{movie.ticketsSold | number}}</td>
+                            <td>{{movie.releaseDate | date}}</td>
+                        </tr>   
+                    </tbody>
+                </table>
+            </section>
         </main>
 
         <!-- 2014 movie box office data (http://www.the-numbers.com/market/2014/top-grossing-movies) -->
